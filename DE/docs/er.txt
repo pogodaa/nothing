@@ -1,0 +1,52 @@
+mermaid
+
+erDiagram
+    users {
+        INTEGER id PK "AUTOINCREMENT"
+        TEXT role "NOT NULL"
+        TEXT full_name "NOT NULL"
+        TEXT login "NOT NULL, UNIQUE"
+        TEXT password "NOT NULL"
+    }
+
+    pickup_points {
+        INTEGER id PK
+        TEXT address "NOT NULL"
+    }
+
+    products {
+        INTEGER id PK "AUTOINCREMENT"
+        TEXT article UK "NOT NULL, UNIQUE"
+        TEXT name "NOT NULL"
+        TEXT unit
+        REAL price "NOT NULL, CHECK >= 0"
+        TEXT supplier
+        TEXT manufacturer
+        TEXT category
+        REAL discount "DEFAULT 0, CHECK >= 0"
+        INTEGER quantity "DEFAULT 0, CHECK >= 0"
+        TEXT description
+        TEXT photo_path
+    }
+
+    orders {
+        INTEGER id PK
+        TEXT articles_text "NOT NULL"
+        TEXT order_date
+        TEXT delivery_date
+        INTEGER pickup_point_id FK
+        TEXT client_name
+        INTEGER pickup_code
+        TEXT status
+    }
+
+    order_items {
+        INTEGER id PK "AUTOINCREMENT"
+        INTEGER order_id FK "NOT NULL"
+        TEXT product_article FK "NOT NULL"
+        INTEGER quantity "NOT NULL, CHECK > 0"
+    }
+
+    pickup_points ||--o{ orders : "pickup_point_id"
+    orders ||--o{ order_items : "order_id CASCADE"
+    products ||--o{ order_items : "product_article"
